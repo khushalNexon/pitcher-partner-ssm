@@ -65,6 +65,8 @@ export default function ClientsPage() {
 
   // if (!loading && clients.length === 0) return <p>No records found</p>;
 
+  console.log("testing log");
+  
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
