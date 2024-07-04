@@ -1,3 +1,7 @@
-[build]	
-    command = "yarn build"
-    build = "build"
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[context.production.environment]
+  VITE_HOST_API = "https://pitcherpartnershareschememanagementapis.azurewebsites.net/api"
+  VITE_URL_POSTFIX = "?code=QmJRCuciMZgSckGPDsq1DisKqO38pFYBdoTlBDg6Tz0sAzFuy0GZZw=="
