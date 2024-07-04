@@ -5,15 +5,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Stack, Button, Container, Typography } from '@mui/material';
 
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
-import usePdfGenerator from 'src/hooks/usePdfGenerator/usePdfGenerator';
+import useGenerateReport from 'src/hooks/usePdfGenerator/usePdfGenerator';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import DataGridTable from 'src/components/data-grid/DataGrid';
-
-import GenerateReport from './GenerateReport';
-
-// import EmployeeModal from './employee-modal';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +19,7 @@ export default function ShareOptionsView() {
   console.log(params, 'params');
   const { id, empid } = params;
   const { employees, loading } = useEmployees({ id });
-  const { generatePdf } = usePdfGenerator();
+  const { generatePDF, pdfUrl, printGeneratedPdf } = useGenerateReport();
 
   const methods = useForm();
 
@@ -33,24 +29,9 @@ export default function ShareOptionsView() {
     setOpen(!open);
   };
 
-  // const onSubmit = (data) => {
-  //   createEmployee({ clientId: id?.split('_')[1] ?? id, payload: { ...data, ClientID: id } })
-  //     .then(() => setOpen(!open))
-  //     .catch((err) => err);
-  // };
-
-  // const handleToggle = () => {
-  //   setOpen(!open);
-  // };
-
   const handleGoBack = () => {
     navigate(-1);
   };
-
-  // const handleOnCellClick = (cell, row) => {
-  //   console.log({ cell, id }, 'cell');
-  //   navigate(`/client/${id}/employee/${cell.row.employeeId}`);
-  // };
 
   const rows = employees
     .filter((employee) => employee.EmployeeID === empid)
@@ -77,8 +58,12 @@ export default function ShareOptionsView() {
   }, [open]);
 
   const handlePrintPdf = () => {
-    console.log(params, 'params');
-    generatePdf();
+    printGeneratedPdf();
+  };
+
+  const handlePreview = () => {
+    console.log('handlePreview', pdfUrl);
+    generatePDF();
   };
 
   const shareOptionsColumns = [
@@ -116,11 +101,17 @@ export default function ShareOptionsView() {
     },
     {
       field: 'actions',
-      headerName: 'get Print',
+      headerName: 'Actions',
       width: 100,
       renderCell: (data) => {
         console.log(data, 'log');
-        return <Button onClick={handlePrintPdf}>Print </Button>;
+        return (
+          <>
+            <Button onClick={handlePrintPdf}>Print </Button>
+            <Button onClick={handlePreview}>Preview </Button>
+            {pdfUrl && <p>{pdfUrl}</p>}
+          </>
+        );
       },
     },
   ];
@@ -161,8 +152,6 @@ export default function ShareOptionsView() {
           />
         </Scrollbar>
       </Card>
-
-      <GenerateReport/>
     </Container>
   );
 }
