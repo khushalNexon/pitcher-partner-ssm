@@ -11,6 +11,8 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import DataGridTable from 'src/components/data-grid/DataGrid';
 
+import GenerateReport from './GenerateReport';
+
 // import EmployeeModal from './employee-modal';
 
 // ----------------------------------------------------------------------
@@ -159,6 +161,8 @@ export default function ShareOptionsView() {
           />
         </Scrollbar>
       </Card>
+
+      <GenerateReport/>
     </Container>
   );
 }
