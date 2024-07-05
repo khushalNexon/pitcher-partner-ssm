@@ -28,7 +28,6 @@ const useClients = () => {
   }, []);
 
   const createClient = async ({ payload }) => {
-    // console.log(payload, clients, 'this is payload....');
     try {
       setLoading(true);
       const data = await addClient({ payload });

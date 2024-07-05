@@ -1,8 +1,7 @@
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Card, Stack, Button, Container, Typography } from '@mui/material';
+import { Card, Stack, Button, Container, IconButton } from '@mui/material';
 
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
 import useGenerateReport from 'src/hooks/usePdfGenerator/usePdfGenerator';
@@ -10,6 +9,10 @@ import useGenerateReport from 'src/hooks/usePdfGenerator/usePdfGenerator';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import DataGridTable from 'src/components/data-grid/DataGrid';
+
+import Preview from '../../assets/preview.svg';
+import { PreviewReport } from './previewReport';
+import Download from '../../assets/download.svg';
 
 // ----------------------------------------------------------------------
 
@@ -21,22 +24,22 @@ export default function ShareOptionsView() {
   const { employees, loading } = useEmployees({ id });
   const { generatePDF, pdfUrl, printGeneratedPdf } = useGenerateReport();
 
-  const methods = useForm();
+  // const methods = useForm();
 
   const [open, setOpen] = useState(false);
 
-  const handleCreateNewEmployee = () => {
-    setOpen(!open);
-  };
+  // const handleCreateNewEmployee = () => {
+  //   setOpen(!open);
+  // };
 
   const handleGoBack = () => {
     navigate(-1);
   };
 
   const rows = employees
-    .filter((employee) => employee.EmployeeID === empid)
-    .flatMap((employee) =>
-      employee.shareOptions.map((option, index) => ({
+    ?.filter((employee) => employee.EmployeeID === empid)
+    ?.flatMap((employee) =>
+      employee?.shareOptions?.map((option, index) => ({
         // ...option,
         issueDate: option.IssueDate,
         marketValue: option.MarketValue,
@@ -50,20 +53,32 @@ export default function ShareOptionsView() {
 
   console.log(rows, 'this are rows');
 
-  useEffect(() => {
-    if (!open) {
-      methods.reset();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  // useEffect(() => {
+  //   if (!open) {
+  //     methods.reset();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [open]);
+
+  // useEffect(() => {
+  //   if (pdfUrl) {
+  //     setOpen(Boolean(pdfUrl));
+  //   }
+  // }, [pdfUrl]);
 
   const handlePrintPdf = () => {
     printGeneratedPdf();
   };
 
   const handlePreview = () => {
-    console.log('handlePreview', pdfUrl);
     generatePDF();
+    console.log('handlePreview', pdfUrl, generatePDF());
+      setOpen(Boolean(pdfUrl));
+  };
+
+  const handleClosePreview = () => {
+    console.log('this is preview');
+    setOpen(false);
   };
 
   const shareOptionsColumns = [
@@ -105,11 +120,15 @@ export default function ShareOptionsView() {
       width: 100,
       renderCell: (data) => {
         console.log(data, 'log');
+        console.log(Preview, Download, 'preview download');
         return (
           <>
-            <Button onClick={handlePrintPdf}>Print </Button>
-            <Button onClick={handlePreview}>Preview </Button>
-            {pdfUrl && <p>{pdfUrl}</p>}
+            <IconButton aria-label="Download" onClick={handlePrintPdf}>
+              <img src={Download} alt="Download" width={20} height={20} />
+            </IconButton>
+            <IconButton aria-label="Preview" onClick={handlePreview}>
+              <img src={Preview} alt="Preview" width={20} height={20} />
+            </IconButton>
           </>
         );
       },
@@ -128,7 +147,7 @@ export default function ShareOptionsView() {
           Back
         </Button>
       </Stack>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">SharedOptions</Typography>
 
         <Button
@@ -139,7 +158,7 @@ export default function ShareOptionsView() {
         >
           New Share Option
         </Button>
-      </Stack>
+      </Stack> */}
 
       <Card sx={{ p: 5 }}>
         <Scrollbar>
@@ -152,6 +171,8 @@ export default function ShareOptionsView() {
           />
         </Scrollbar>
       </Card>
+      {console.log(open, 'open')}
+      <PreviewReport open={open} handleClose={handleClosePreview} pdfUrl={pdfUrl}/>
     </Container>
   );
 }

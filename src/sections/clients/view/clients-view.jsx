@@ -62,8 +62,6 @@ export default function ClientsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // if (!loading && clients.length === 0) return <p>No records found</p>;
-
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
