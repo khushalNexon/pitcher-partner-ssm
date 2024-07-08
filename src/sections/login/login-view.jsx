@@ -42,8 +42,6 @@ export default function LoginView() {
     }
   };
 
-  console.log(errors, 'this are errors');
-
   const renderForm = (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>

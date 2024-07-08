@@ -4,12 +4,16 @@ import addEmployee from 'src/services/addEmployee';
 import getEmployees from 'src/services/getEmployees';
 import { useSnackbar } from 'src/context/SnackbarContext';
 
-const useEmployees = ({ id }) => {
+import useClients from '../useClients/useClients';
+
+const useEmployees = ({ id, empid = '' }) => {
+  const [selectedEmployeeDetails, setSelectedEmployeeDetails] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const { openSnackbar } = useSnackbar();
+  const { fetchClientById } = useClients();
 
   const fetchEmployees = async ({ clientId }) => {
     try {
@@ -25,6 +29,7 @@ const useEmployees = ({ id }) => {
 
   useEffect(() => {
     const updatedId = id?.split('_')[1] ?? id;
+    const updatedEmpid = empid?.split('_')[1] ?? empid;
 
     fetchEmployees({ clientId: updatedId })
       .then((res) => setEmployees(res))
@@ -32,7 +37,24 @@ const useEmployees = ({ id }) => {
         setEmployees([]);
         setError(err);
       });
-  }, [id]);
+
+    // need to create seperate hook for this, as its used in shareoptions only
+    if (updatedEmpid && updatedEmpid.length > 0) {
+      fetchClientById({ clientId: updatedId })
+        .then((res) => {
+          const { ClientABNNo, ClientEmail, ClientName } = res;
+          const employeeDetail = res.employees.find((v) => v.EmployeeID === empid);
+          const details = { ClientABNNo, ClientEmail, ClientName, employeeDetail };
+          setSelectedEmployeeDetails(details);
+        })
+        .catch((err) => {
+          setSelectedEmployeeDetails(null);
+          setError(err);
+        });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, empid]);
 
   const createEmployee = async ({ clientId, payload }) => {
     try {
@@ -64,7 +86,7 @@ const useEmployees = ({ id }) => {
     }
   };
 
-  return { employees, loading, error, createEmployee };
+  return { employees, loading, error, createEmployee, selectedEmployeeDetails };
 };
 
 export default useEmployees;

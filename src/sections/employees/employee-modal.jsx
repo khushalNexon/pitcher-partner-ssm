@@ -7,7 +7,6 @@ import { Box, Button, TextField } from '@mui/material';
 import TransitionsModal from 'src/components/modal/modal';
 
 const EmployeeModal = ({ methods, isOpen, handleToggle, onSubmit, loading }) => {
-  console.log(methods, isOpen, handleToggle, onSubmit, 'methods, isOpen, handleToggle, onSubmit');
   if (loading) return <h2>Loading...</h2>;
   return (
     <TransitionsModal isOpen={isOpen} handleToggle={handleToggle}>

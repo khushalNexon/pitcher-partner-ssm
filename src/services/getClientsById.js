@@ -1,11 +1,12 @@
 import axiosInstance from 'src/utils/axios';
 
-const getClientsById = async ({clientId}) => {
+const getClientsById = async ({ clientId }) => {
   try {
-    const response = await axiosInstance.get(`/client/getclient/${clientId}`);
-    console.log('Data:', response.data);
+    const response = await axiosInstance.get(
+      `/client/getclient/${clientId}${import.meta.env.VITE_URL_POSTFIX}`
+    );
+    return response.data;
   } catch (error) {
-    console.error('Error fetching data:', error);
     throw Error(error.message || 'Something went wrong');
   }
 };

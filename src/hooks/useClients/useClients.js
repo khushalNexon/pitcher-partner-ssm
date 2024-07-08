@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import addClient from 'src/services/addClient';
 import getClients from 'src/services/getClients';
+import getClientsById from 'src/services/getClientsById';
 import { useSnackbar } from 'src/context/SnackbarContext';
 
 const useClients = () => {
@@ -42,18 +43,31 @@ const useClients = () => {
         },
       ];
       setClients(updatedClients);
-      openSnackbar(data.result, 'success')
+      openSnackbar(data.result, 'success');
       return data.result;
     } catch (err) {
       setError(err.message || 'An error occurred');
-      openSnackbar(err.message, 'error')
+      openSnackbar(err.message, 'error');
       return err.message || 'An error occurred';
     } finally {
       setLoading(false);
     }
   };
 
-  return { clients, loading, error, createClient };
+  const fetchClientById = async ({ clientId }) => {
+    try {
+      setLoading(true);
+      const data = await getClientsById({ clientId });
+      return data.result;
+    } catch (err) {
+      // throw err;
+      return err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { clients, loading, error, createClient, fetchClientById };
 };
 
 export default useClients;

@@ -5,11 +5,9 @@ const addShareOptions = async ({ clientId, employeeId }) => {
     const response = await axiosInstance.post(
       `/clients/${clientId}/employees/${employeeId}/shareoptions`
     );
-    console.log('Data:', response.data);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching data:', error);
-    console.error('Error fetching data:', error);
-    throw Error(error.message)
+    throw Error(error.message);
   }
 };
 

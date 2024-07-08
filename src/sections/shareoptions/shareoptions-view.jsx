@@ -19,18 +19,11 @@ import Download from '../../assets/download.svg';
 export default function ShareOptionsView() {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params, 'params');
   const { id, empid } = params;
-  const { employees, loading } = useEmployees({ id });
+  const { employees, loading, selectedEmployeeDetails } = useEmployees({ id, empid });
   const { generatePDF, pdfUrl, printGeneratedPdf } = useGenerateReport();
 
-  // const methods = useForm();
-
   const [open, setOpen] = useState(false);
-
-  // const handleCreateNewEmployee = () => {
-  //   setOpen(!open);
-  // };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -51,33 +44,16 @@ export default function ShareOptionsView() {
       }))
     );
 
-  console.log(rows, 'this are rows');
-
-  // useEffect(() => {
-  //   if (!open) {
-  //     methods.reset();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [open]);
-
-  // useEffect(() => {
-  //   if (pdfUrl) {
-  //     setOpen(Boolean(pdfUrl));
-  //   }
-  // }, [pdfUrl]);
-
-  const handlePrintPdf = () => {
-    printGeneratedPdf();
+  const handlePrintPdf = ({ shareOption }) => {
+    printGeneratedPdf({ empDetails: selectedEmployeeDetails, shareDetail: shareOption });
   };
 
-  const handlePreview = () => {
-    generatePDF();
-    console.log('handlePreview', pdfUrl, generatePDF());
+  const handlePreview = ({ shareOption }) => {
+    generatePDF({ empDetails: selectedEmployeeDetails, shareDetail: shareOption });
     setOpen(Boolean(pdfUrl));
   };
 
   const handleClosePreview = () => {
-    console.log('this is preview');
     setOpen(false);
   };
 
@@ -118,20 +94,19 @@ export default function ShareOptionsView() {
       field: 'actions',
       headerName: 'Actions',
       width: 100,
-      renderCell: (data) => {
-        console.log(data, 'log');
-        console.log(Preview, Download, 'preview download');
-        return (
-          <>
-            <IconButton aria-label="Download" onClick={handlePrintPdf}>
-              <img src={Download} alt="Download" width={20} height={20} />
-            </IconButton>
-            <IconButton aria-label="Preview" onClick={handlePreview}>
-              <img src={Preview} alt="Preview" width={20} height={20} />
-            </IconButton>
-          </>
-        );
-      },
+      renderCell: (data) => (
+        <>
+          <IconButton
+            aria-label="Download"
+            onClick={() => handlePrintPdf({ shareOption: data.row })}
+          >
+            <img src={Download} alt="Download" width={20} height={20} />
+          </IconButton>
+          <IconButton aria-label="Preview" onClick={() => handlePreview({ shareOption: data.row })}>
+            <img src={Preview} alt="Preview" width={20} height={20} />
+          </IconButton>
+        </>
+      ),
     },
   ];
 
@@ -147,18 +122,6 @@ export default function ShareOptionsView() {
           Back
         </Button>
       </Stack>
-      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">SharedOptions</Typography>
-
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-          onClick={handleCreateNewEmployee}
-        >
-          New Share Option
-        </Button>
-      </Stack> */}
 
       <Card sx={{ p: 5 }}>
         <Scrollbar>
@@ -171,7 +134,6 @@ export default function ShareOptionsView() {
           />
         </Scrollbar>
       </Card>
-      {console.log(open, 'open')}
       <PreviewReport open={open} handleClose={handleClosePreview} pdfUrl={pdfUrl} />
     </Container>
   );

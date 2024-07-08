@@ -6,9 +6,6 @@ import { useSnackbar } from 'src/context/SnackbarContext';
 
 const CustomSnackbar = () => {
   const { snackbar, closeSnackbar } = useSnackbar();
-
-  console.log(snackbar, closeSnackbar, 'snackbar, closeSnackbar');
-
   return (
     <Snackbar
       open={snackbar.open}

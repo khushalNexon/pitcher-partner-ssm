@@ -26,8 +26,6 @@ export default function EmployeesView() {
 
   const [open, setOpen] = useState(false);
 
-  console.log(employees, 'employees');
-
   const handleCreateNewEmployee = () => {
     setOpen(!open);
   };
@@ -46,9 +44,6 @@ export default function EmployeesView() {
     navigate(-1);
   };
 
-  // const handleOnCellClick = (cell, row) => {
-  //   navigate(`/client/${id}/employee/${cell.row.employeeId}`);
-  // };
   const handleOnCellClick = (cell, row) => {
     if (cell.field === 'clientId') {
       navigate(`/client/${id}/employee/${cell.row.employeeId}`);

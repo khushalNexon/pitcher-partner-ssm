@@ -24,25 +24,21 @@ export const getTodayDate = ({ type = 'dd/mm/yyy' }) => {
   // Format the date as mm-dd-yyyy and log it
   if (type === 'dd-mm-yyy') {
     today = `${mm}-${dd}-${yyyy}`;
-    console.log(today);
   }
 
   // Format the date as mm/dd/yyyy and log it
   if (type === 'mm/dd/yyyy') {
     today = `${mm}/${dd}/${yyyy}`;
-    console.log(today);
   }
 
   // Format the date as dd-mm-yyyy and log it
   if (type === 'dd-mm-yyyy') {
     today = `${dd}-${mm}-${yyyy}`;
-    console.log(today);
   }
 
   // Format the date as dd/mm/yyyy and log it
   if (type === 'dd/mm/yyyy') {
     today = `${dd}/${mm}/${yyyy}`;
-    console.log(today);
   }
   
   return today;

@@ -3,6 +3,5 @@ export function isAuthenticated() {
   return !!token;
 }
 export function logout() {
-  console.log("inside logout");
   localStorage.removeItem('token');
 }
