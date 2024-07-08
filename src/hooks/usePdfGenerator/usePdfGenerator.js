@@ -14,7 +14,8 @@ const UpdatePDF = async (pdfBytes1) => {
   const firstPage = pages[0];
 
   const year = new Date().getFullYear();
-
+  const date = getTodayDate({ type: 'dd-mm-yyyy' });
+  
   firstPage.drawText(`${year}`, {
     x: 510,
     y: 770,
@@ -137,7 +138,6 @@ const UpdatePDF = async (pdfBytes1) => {
   });
 
   // Date
-  const date = getTodayDate({ type: 'dd-mm-yyyy' });
   firstPage.drawText(`${date}`, {
     x: 437,
     y: 89,

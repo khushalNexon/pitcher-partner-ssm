@@ -12,16 +12,16 @@ const navConfig = [
     path: 'client',
     icon: icon('ic_user'),
   },
-  {
-    title: 'employees',
-    path: 'employees',
-    icon: icon('ic_cart'),
-  },
-  {
-    title: 'share options',
-    path: 'shareoptions',
-    icon: icon('ic_blog'),
-  },
+  // {
+  //   title: 'employees',
+  //   path: 'employees',
+  //   icon: icon('ic_cart'),
+  // },
+  // {
+  //   title: 'share options',
+  //   path: 'shareoptions',
+  //   icon: icon('ic_blog'),
+  // },
 ];
 
 export default navConfig;

@@ -73,7 +73,7 @@ export default function ShareOptionsView() {
   const handlePreview = () => {
     generatePDF();
     console.log('handlePreview', pdfUrl, generatePDF());
-      setOpen(Boolean(pdfUrl));
+    setOpen(Boolean(pdfUrl));
   };
 
   const handleClosePreview = () => {
@@ -172,7 +172,7 @@ export default function ShareOptionsView() {
         </Scrollbar>
       </Card>
       {console.log(open, 'open')}
-      <PreviewReport open={open} handleClose={handleClosePreview} pdfUrl={pdfUrl}/>
+      <PreviewReport open={open} handleClose={handleClosePreview} pdfUrl={pdfUrl} />
     </Container>
   );
 }
