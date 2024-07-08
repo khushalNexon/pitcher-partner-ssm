@@ -144,6 +144,7 @@ export default function EmployeesView() {
         handleDownload={handleDownload}
         handleFileChange={handleFileChange}
         warningList={empUpdateDetails?.warnings ?? []}
+        empUpdateDetails={empUpdateDetails  ?? null}
       />
     </Container>
   );

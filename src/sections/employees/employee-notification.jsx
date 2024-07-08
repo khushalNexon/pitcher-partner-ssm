@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Alert } from '@mui/material';
 
-const EmployeeNotification = ({ messageList=[] }) => {
-
-  if (messageList?.length === 0) return null;
+const EmployeeNotification = ({ messageList = [], empUpdateDetails = null }) => {
+  if (messageList?.length === 0 || !empUpdateDetails) return null;
   return (
     <Alert severity="warning">
-      This is a warning Alert.
+      {`Employee ${empUpdateDetails?.addedEmployees}/${empUpdateDetails?.totalEmployees} has been updated with the following warnings:`}
       <ul type="disc">
         {messageList.map((message, index) => (
           <li>{message}</li>
@@ -20,6 +19,7 @@ const EmployeeNotification = ({ messageList=[] }) => {
 
 EmployeeNotification.propTypes = {
   messageList: PropTypes.array,
+  empUpdateDetails: PropTypes.object,
 };
 
 export default EmployeeNotification;

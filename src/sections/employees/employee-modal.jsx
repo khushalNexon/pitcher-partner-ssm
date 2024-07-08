@@ -47,8 +47,8 @@ const EmployeeModal = ({
   handleDownload,
   handleFileChange,
   warningList,
+  empUpdateDetails,
 }) => {
-
   const [tabValue, setTabValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -72,10 +72,10 @@ const EmployeeModal = ({
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
         <EmployeeUploadCSV onDownloadClick={handleDownload} handleFileChange={handleFileChange} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          <EmployeeNotification messageList={warningList} empUpdateDetails={empUpdateDetails} />
+        </Box>
       </CustomTabPanel>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-        <EmployeeNotification messageList={warningList} />
-      </Box>
     </TransitionsModal>
   );
 };
@@ -90,6 +90,7 @@ EmployeeModal.propTypes = {
   onSubmit: PropTypes.func,
   loading: PropTypes.bool,
   warningList: PropTypes.array,
+  empUpdateDetails: PropTypes.object,
 };
 
 export default EmployeeModal;
