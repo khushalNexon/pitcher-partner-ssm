@@ -14,7 +14,6 @@ import { logout } from 'src/utils/auth';
 
 import { account } from 'src/_mock/account';
 
-
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -26,6 +25,10 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
+    setOpen(null);
+  };
+
+  const handleOnLogout = () => {
     setOpen(null);
     logout();
     navigate('/login');
@@ -84,7 +87,7 @@ export default function AccountPopover() {
         <MenuItem
           disableRipple
           disableTouchRipple
-          onClick={handleClose}
+          onClick={handleOnLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
           Logout
