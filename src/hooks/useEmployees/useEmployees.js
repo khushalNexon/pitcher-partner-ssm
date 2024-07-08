@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import addEmployee from 'src/services/addEmployee';
 import getEmployees from 'src/services/getEmployees';
 import { useSnackbar } from 'src/context/SnackbarContext';
+import uploadCSVForEmployee from 'src/services/uploadCSVForEmployee';
 
 import useClients from '../useClients/useClients';
 
 const useEmployees = ({ id, empid = '' }) => {
   const [selectedEmployeeDetails, setSelectedEmployeeDetails] = useState(null);
+  const [empUpdateDetails, setEmpUpdateDetails] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,8 +21,11 @@ const useEmployees = ({ id, empid = '' }) => {
     try {
       setLoading(true);
       const data = await getEmployees({ clientId });
+      setEmployees(data.result);
       return data.result;
     } catch (err) {
+      setEmployees([]);
+      setError(err.message || 'An error occurred');
       return err.message || 'An error occurred';
     } finally {
       setLoading(false);
@@ -31,12 +36,7 @@ const useEmployees = ({ id, empid = '' }) => {
     const updatedId = id?.split('_')[1] ?? id;
     const updatedEmpid = empid?.split('_')[1] ?? empid;
 
-    fetchEmployees({ clientId: updatedId })
-      .then((res) => setEmployees(res))
-      .catch((err) => {
-        setEmployees([]);
-        setError(err);
-      });
+    fetchEmployees({ clientId: updatedId });
 
     // need to create seperate hook for this, as its used in shareoptions only
     if (updatedEmpid && updatedEmpid.length > 0) {
@@ -52,6 +52,11 @@ const useEmployees = ({ id, empid = '' }) => {
           setError(err);
         });
     }
+
+    return () => {
+      setSelectedEmployeeDetails(null);
+      setEmployees([]);
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, empid]);
@@ -86,7 +91,74 @@ const useEmployees = ({ id, empid = '' }) => {
     }
   };
 
-  return { employees, loading, error, createEmployee, selectedEmployeeDetails };
+  const uploadCSVFile = async ({ clientId, file }) => {
+    const updatedClientID = clientId?.split('_')[1] ?? clientId;
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setLoading(true);
+      const data = await uploadCSVForEmployee({ clientId: updatedClientID, formData });
+      setEmpUpdateDetails(data.result);
+      openSnackbar(data.message, 'success');
+      fetchEmployees({ clientId: updatedClientID });
+      return data.result;
+    } catch (err) {
+      setError(err.message || 'An error occurred');
+      openSnackbar(err.message, 'error');
+      return err.message || 'An error occurred';
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const downloadCSVFormate = () => {
+    // Add your download logic here
+    const data = [
+      [
+        'EmployeeABNNo',
+        'EmployeeAddressLine1',
+        'EmployeeAddressLine2',
+        'EmployeeEmail',
+        'EmployeeFullName',
+        'EmployeeTFNNo',
+      ],
+    ];
+
+    // Convert array of data into CSV string
+    const csvContent = data.map((e) => e.join(',')).join('\n');
+
+    // Create a blob with the CSV content and the type of file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a link to download the blob as a file
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'employees.csv');
+    link.style.visibility = 'hidden';
+
+    // Append the link to the document and trigger the download, then remove the link
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const reInitialiseEmployeeDetails = () => {
+    setEmpUpdateDetails(null);
+  };
+
+  return {
+    employees,
+    loading,
+    error,
+    createEmployee,
+    selectedEmployeeDetails,
+    empUpdateDetails,
+    uploadCSVFile,
+    downloadCSVFormate,
+    reInitialiseEmployeeDetails
+  };
 };
 
 export default useEmployees;

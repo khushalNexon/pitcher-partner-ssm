@@ -20,7 +20,16 @@ export default function EmployeesView() {
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
-  const { employees, loading, createEmployee } = useEmployees({ id });
+  const {
+    employees,
+    loading,
+    createEmployee,
+    downloadCSVFormate,
+    uploadCSVFile,
+    error,
+    empUpdateDetails,
+    reInitialiseEmployeeDetails,
+  } = useEmployees({ id });
 
   const methods = useForm();
 
@@ -50,6 +59,21 @@ export default function EmployeesView() {
     }
   };
 
+  const handleDownload = () => {
+    downloadCSVFormate();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    uploadCSVFile({ clientId: id, file }).then((res) => {
+      if (res.warnings.length === 0) {
+        console.log(res, 'res if');
+        setOpen(!open);
+        reInitialiseEmployeeDetails();
+      }
+    });
+  };
+
   const rows =
     employees && employees.length > 0
       ? employees?.map((v, index) => ({
@@ -67,6 +91,7 @@ export default function EmployeesView() {
   useEffect(() => {
     if (!open) {
       methods.reset();
+      reInitialiseEmployeeDetails();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -115,6 +140,10 @@ export default function EmployeesView() {
         handleToggle={handleToggle}
         onSubmit={onSubmit}
         loading={loading}
+        error={error}
+        handleDownload={handleDownload}
+        handleFileChange={handleFileChange}
+        warningList={empUpdateDetails?.warnings ?? []}
       />
     </Container>
   );
