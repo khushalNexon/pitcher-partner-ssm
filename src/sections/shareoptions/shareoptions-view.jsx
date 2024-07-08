@@ -62,38 +62,45 @@ export default function ShareOptionsView() {
       field: 'clientId',
       headerName: 'Client ID',
       valueGetter: (value) => value?.split('_')[1] ?? value,
+      flex: 1,
     },
     {
       field: 'employeeId',
       headerName: 'Employee ID',
       valueGetter: (value) => value?.split('_')[1] ?? value,
+      flex: 1,
     },
     {
       field: 'exercisePrice',
       headerName: 'Exercise Price',
       type: 'number',
       editable: false,
+      flex: 1,
     },
     {
       field: 'issueDate',
       headerName: 'Issue Date',
       // type: 'date',
       editable: false,
+      flex: 1,
     },
     {
       field: 'marketValue',
       headerName: 'Market Vlaue',
       type: 'number',
+      flex: 1,
       editable: false,
     },
     {
       field: 'noOfOptions',
       headerName: '# of Options',
+      flex: 1,
     },
     {
       field: 'actions',
       headerName: 'Actions',
       width: 100,
+      flex: 1,
       renderCell: (data) => (
         <>
           <IconButton
