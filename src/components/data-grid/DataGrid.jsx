@@ -21,6 +21,7 @@ export default function DataGridTable({
         checkboxSelection={checkboxSelection}
         disableRowSelectionOnClick
         onCellClick={handleOnCellClick}
+        onRowClick={handleOnCellClick}
         loading={loading}
       />
     </Box>

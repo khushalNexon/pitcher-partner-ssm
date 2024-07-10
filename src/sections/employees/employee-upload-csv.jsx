@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Box, Button } from '@mui/material';
 
-const EmployeeUploadCSV = ({ onDownloadClick, handleFileChange}) => (
+const EmployeeUploadCSV = ({ onDownloadClick, handleFileChange }) => (
   <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
     <Box sx={{ my: 2 }}>
       <Button variant="contained" onClick={onDownloadClick}>
-        Download Formate
+        Download CSV Template
       </Button>
     </Box>
     <Box>
@@ -15,7 +15,6 @@ const EmployeeUploadCSV = ({ onDownloadClick, handleFileChange}) => (
         Upload CSV
         <input type="file" hidden onChange={handleFileChange} />
       </Button>
-      
     </Box>
   </Box>
 );

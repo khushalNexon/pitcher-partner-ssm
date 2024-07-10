@@ -34,24 +34,21 @@ const useEmployees = ({ id, empid = '' }) => {
 
   useEffect(() => {
     const updatedId = id?.split('_')[1] ?? id;
-    const updatedEmpid = empid?.split('_')[1] ?? empid;
 
     fetchEmployees({ clientId: updatedId });
 
     // need to create seperate hook for this, as its used in shareoptions only
-    if (updatedEmpid && updatedEmpid.length > 0) {
-      fetchClientById({ clientId: updatedId })
-        .then((res) => {
-          const { ClientABNNo, ClientEmail, ClientName } = res;
-          const employeeDetail = res.employees.find((v) => v.EmployeeID === empid);
-          const details = { ClientABNNo, ClientEmail, ClientName, employeeDetail };
-          setSelectedEmployeeDetails(details);
-        })
-        .catch((err) => {
-          setSelectedEmployeeDetails(null);
-          setError(err);
-        });
-    }
+    fetchClientById({ clientId: updatedId })
+      .then((res) => {
+        const { ClientABNNo, ClientEmail, ClientName } = res;
+        const employeeDetail = res.employees.find((v) => v.EmployeeID === empid);
+        const details = { ClientABNNo, ClientEmail, ClientName, employeeDetail };
+        setSelectedEmployeeDetails(details);
+      })
+      .catch((err) => {
+        setSelectedEmployeeDetails(null);
+        setError(err);
+      });
 
     return () => {
       setSelectedEmployeeDetails(null);
@@ -157,7 +154,7 @@ const useEmployees = ({ id, empid = '' }) => {
     empUpdateDetails,
     uploadCSVFile,
     downloadCSVFormate,
-    reInitialiseEmployeeDetails
+    reInitialiseEmployeeDetails,
   };
 };
 

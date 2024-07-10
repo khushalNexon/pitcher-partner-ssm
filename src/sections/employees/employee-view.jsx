@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Card, Stack, Button, Container, Typography } from '@mui/material';
+import { Box, Card, Stack, Paper, Button, Container, Typography } from '@mui/material';
 
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
 
@@ -20,6 +20,7 @@ export default function EmployeesView() {
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
+  const clientId = id?.split('_')[1] ?? id;
   const {
     employees,
     loading,
@@ -29,6 +30,7 @@ export default function EmployeesView() {
     error,
     empUpdateDetails,
     reInitialiseEmployeeDetails,
+    selectedEmployeeDetails,
   } = useEmployees({ id });
 
   const methods = useForm();
@@ -40,7 +42,7 @@ export default function EmployeesView() {
   };
 
   const onSubmit = (data) => {
-    createEmployee({ clientId: id?.split('_')[1] ?? id, payload: { ...data, ClientID: id } })
+    createEmployee({ clientId: clientId ?? id, payload: { ...data, ClientID: id } })
       .then(() => setOpen(!open))
       .catch((err) => err);
   };
@@ -54,9 +56,7 @@ export default function EmployeesView() {
   };
 
   const handleOnCellClick = (cell, row) => {
-    if (cell.field === 'clientId') {
-      navigate(`/client/${id}/employee/${cell.row.employeeId}`);
-    }
+    navigate(`/client/${id}/employee/${cell.row.employeeId}`);
   };
 
   const handleDownload = () => {
@@ -98,7 +98,7 @@ export default function EmployeesView() {
 
   return (
     <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+      <Stack direction="row" alignItems="center" justifyContent="start" mb={5}>
         <Button
           variant="contained"
           color="inherit"
@@ -109,7 +109,21 @@ export default function EmployeesView() {
         </Button>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Employees</Typography>
+        <Paper
+          sx={{
+            p: 2,
+            width: '60%',
+            boxShadow:
+              '0 0 0px 0 rgba(145, 158, 171, 0.08),0 10px 50px 0px rgba(145, 158, 171, 0.08)',
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body1">Client Id: {id ?? ''}</Typography>
+            <Typography variant="body1">
+              Client Name: {selectedEmployeeDetails?.ClientName ?? ''}
+            </Typography>
+          </Box>
+        </Paper>
 
         <Button
           variant="contained"
@@ -144,7 +158,7 @@ export default function EmployeesView() {
         handleDownload={handleDownload}
         handleFileChange={handleFileChange}
         warningList={empUpdateDetails?.warnings ?? []}
-        empUpdateDetails={empUpdateDetails  ?? null}
+        empUpdateDetails={empUpdateDetails ?? null}
       />
     </Container>
   );

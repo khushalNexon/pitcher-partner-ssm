@@ -15,34 +15,34 @@ export const clientColumns = [
   },
   {
     field: 'name',
-    headerName: 'Full Name',
+    headerName: 'Client Name',
     editable: false,
     flex: 1,
   },
-  {
-    field: 'email',
-    headerName: 'Email',
-    type: 'email',
-    editable: false,
-    flex: 1,
-  },
+  // {
+  //   field: 'email',
+  //   headerName: 'Email',
+  //   type: 'email',
+  //   editable: false,
+  //   flex: 1,
+  // },
   {
     field: 'employeeNumbers',
     headerName: 'No. Of Employees',
-    type: 'number',
     editable: false,
-    flex: 1,
     valueGetter: (value, row) => row.employees.length,
+    align: 'left',
+    flex: 1,
   },
 ];
 
 export const employeeColumns = [
-  {
-    field: 'clientId',
-    headerName: 'Client ID',
-    valueGetter: (value) => value?.split('_')[1] ?? value,
-    flex: 1,
-  },
+  // {
+  //   field: 'clientId',
+  //   headerName: 'Client ID',
+  //   valueGetter: (value) => value?.split('_')[1] ?? value,
+  //   flex: 1,
+  // },
   {
     field: 'employeeId',
     headerName: 'Employee ID',

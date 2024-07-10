@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Card, Stack, Button, Container, IconButton } from '@mui/material';
+import { Box, Card, Stack, Paper, Button, Container, IconButton, Typography } from '@mui/material';
 
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
 import useGenerateReport from 'src/hooks/usePdfGenerator/usePdfGenerator';
@@ -128,6 +128,26 @@ export default function ShareOptionsView() {
         >
           Back
         </Button>
+      </Stack>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Paper
+          sx={{
+            p: 2,
+            width: '60%',
+            boxShadow:
+              '0 0 0px 0 rgba(145, 158, 171, 0.08),0 10px 50px 0px rgba(145, 158, 171, 0.08)',
+          }}
+        >
+          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+            {console.log(selectedEmployeeDetails, 'selectedEmployeeDetails')}
+            <Typography variant="body1">
+              Employee Id: {selectedEmployeeDetails?.employeeDetail?.EmployeeID ?? ''}
+            </Typography>
+            <Typography variant="body1">
+              Employee Name: {selectedEmployeeDetails?.employeeDetail?.EmployeeFullName ?? ''}
+            </Typography>
+          </Box>
+        </Paper>
       </Stack>
 
       <Card sx={{ p: 5 }}>
