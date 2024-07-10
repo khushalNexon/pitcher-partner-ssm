@@ -26,7 +26,7 @@ export default function ShareOptionsView() {
   const [open, setOpen] = useState(false);
 
   const handleGoBack = () => {
-    navigate(-1);
+    navigate(`/client/${id}`);
   };
 
   const rows = employees

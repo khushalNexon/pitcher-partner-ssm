@@ -52,7 +52,7 @@ export default function EmployeesView() {
   };
 
   const handleGoBack = () => {
-    navigate(-1);
+    navigate('/client');
   };
 
   const handleOnCellClick = (cell, row) => {
