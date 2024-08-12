@@ -118,7 +118,6 @@ export default function EmployeesView() {
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body1">Client Id: {id ?? ''}</Typography>
             <Typography variant="body1">
               Client Name: {selectedEmployeeDetails?.ClientName ?? ''}
             </Typography>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { Box, Card, Stack, Paper, Button, Container, IconButton, Typography } from '@mui/material';
 
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
+import useShareOptions from 'src/hooks/useShareOptions/useShareOptions';
 import useGenerateReport from 'src/hooks/usePdfGenerator/usePdfGenerator';
 
 import Iconify from 'src/components/iconify';
@@ -13,36 +15,32 @@ import DataGridTable from 'src/components/data-grid/DataGrid';
 import Preview from '../../assets/preview.svg';
 import { PreviewReport } from './previewReport';
 import Download from '../../assets/download.svg';
+import ShareOptionsModal from './shareoptions-modal';
 
 // ----------------------------------------------------------------------
 
 export default function ShareOptionsView() {
   const navigate = useNavigate();
+  const methods = useForm();
   const params = useParams();
   const { id, empid } = params;
+  const clientId = id?.split('_')[1] ?? id;
+  const employeeId = empid?.split('_')[1] ?? empid;
   const { employees, loading, selectedEmployeeDetails } = useEmployees({ id, empid });
   const { generatePDF, pdfUrl, printGeneratedPdf } = useGenerateReport();
+  const { shareOptionloading, createShareOption, shareOptionsList } = useShareOptions({
+    id,
+    empid,
+  });
 
   const [open, setOpen] = useState(false);
+  const [openShareOptionModal, setOpenShareOptionModal] = useState(false);
 
   const handleGoBack = () => {
     navigate(`/client/${id}`);
   };
 
-  const rows = employees
-    ?.filter((employee) => employee.EmployeeID === empid)
-    ?.flatMap((employee) =>
-      employee?.shareOptions?.map((option, index) => ({
-        // ...option,
-        issueDate: option.IssueDate,
-        marketValue: option.MarketValue,
-        noOfOptions: option.NumberOfOptions,
-        employeeId: option.EmployeeID,
-        exercisePrice: option.ExercisePrice,
-        id: `${option.EmployeeID}_${index}`,
-        clientId: employee.ClientID,
-      }))
-    );
+  const rows = shareOptionsList;
 
   const handlePrintPdf = ({ shareOption }) => {
     printGeneratedPdf({ empDetails: selectedEmployeeDetails, shareDetail: shareOption });
@@ -57,50 +55,52 @@ export default function ShareOptionsView() {
     setOpen(false);
   };
 
+  const handleOnAddShareOptionsSubmit = (data) => {
+    createShareOption({ clientId, employeeId, payload: data })
+      .then((res) => {
+        methods.reset();
+        setOpenShareOptionModal(false);
+      })
+      .catch((err) => console.log(err, 'this is err'));
+  };
+
   const shareOptionsColumns = [
-    {
-      field: 'clientId',
-      headerName: 'Client ID',
-      valueGetter: (value) => value?.split('_')[1] ?? value,
-      flex: 1,
-    },
-    {
-      field: 'employeeId',
-      headerName: 'Employee ID',
-      valueGetter: (value) => value?.split('_')[1] ?? value,
-      flex: 1,
-    },
-    {
-      field: 'exercisePrice',
-      headerName: 'Exercise Price',
-      type: 'number',
-      editable: false,
-      flex: 1,
-    },
     {
       field: 'issueDate',
       headerName: 'Issue Date',
       // type: 'date',
       editable: false,
       flex: 1,
+      align: 'left',
+    },
+    {
+      field: 'exercisePrice',
+      headerName: 'Exercise Price',
+      // type: 'number',
+      editable: false,
+      flex: 1,
+      align: 'left',
     },
     {
       field: 'marketValue',
-      headerName: 'Market Vlaue',
-      type: 'number',
+      headerName: 'Market Value',
+      // type: 'number',
       flex: 1,
       editable: false,
+      align: 'left',
     },
     {
       field: 'noOfOptions',
-      headerName: '# of Options',
+      headerName: 'Options Allocated',
       flex: 1,
+      align: 'left',
     },
     {
       field: 'actions',
       headerName: 'Actions',
       width: 100,
       flex: 1,
+      align: 'left',
       renderCell: (data) => (
         <>
           <IconButton
@@ -139,15 +139,23 @@ export default function ShareOptionsView() {
           }}
         >
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-            {console.log(selectedEmployeeDetails, 'selectedEmployeeDetails')}
-            <Typography variant="body1">
-              Employee Id: {selectedEmployeeDetails?.employeeDetail?.EmployeeID ?? ''}
-            </Typography>
+            <Typography variant="body1">Employee Id: {employeeId ?? ''}</Typography>
             <Typography variant="body1">
               Employee Name: {selectedEmployeeDetails?.employeeDetail?.EmployeeFullName ?? ''}
             </Typography>
           </Box>
         </Paper>
+
+        <Button
+          variant="contained"
+          color="inherit"
+          startIcon={<Iconify icon="eva:plus-fill" />}
+          onClick={() => {
+            setOpenShareOptionModal(true);
+          }}
+        >
+          New Share Options
+        </Button>
       </Stack>
 
       <Card sx={{ p: 5 }}>
@@ -162,6 +170,16 @@ export default function ShareOptionsView() {
         </Scrollbar>
       </Card>
       <PreviewReport open={open} handleClose={handleClosePreview} pdfUrl={pdfUrl} />
+      <ShareOptionsModal
+        methods={methods}
+        isOpen={openShareOptionModal}
+        handleToggle={() => {
+          methods.reset();
+          setOpenShareOptionModal(false);
+        }}
+        loading={shareOptionloading}
+        onSubmit={handleOnAddShareOptionsSubmit}
+      />
     </Container>
   );
 }
