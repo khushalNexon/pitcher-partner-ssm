@@ -16,11 +16,13 @@ const useGenerateReport = () => {
       EmployeeABNNo,
       EmployeeAddressLine1,
       EmployeeAddressLine2,
-      EmployeeAddressLine3,
-      EmployeeAddressLine4,
       EmployeeFullName,
       EmployeeTFNNo,
+      Suburb,
+      State,
+      PostalCode,
     } = empDetails.employeeDetail;
+    console.log(empDetails.employeeDetail, Suburb, State, PostalCode, 'empDetails.employeeDetail');
     const { noOfOptions, marketValue, issueDate, exercisePrice } = shareDetail;
 
     const pdfDoc = await PDFDocument.load(pdfBytes1);
@@ -57,13 +59,13 @@ const useGenerateReport = () => {
       size: 10,
       color: rgb(0, 0, 0),
     });
-    firstPage.drawText(`${EmployeeAddressLine3 ?? ''}`, {
+    firstPage.drawText(`${Suburb ?? ''}`, {
       x: 50,
       y: 619,
       size: 10,
       color: rgb(0, 0, 0),
     });
-    firstPage.drawText(`${EmployeeAddressLine4 ?? ''}`, {
+    firstPage.drawText(`${State ?? ''}, ${PostalCode ?? ''}`, {
       x: 50,
       y: 601,
       size: 10,
