@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { csvKeys } from 'src/utils/csvObject';
+
 import addEmployee from 'src/services/addEmployee';
 import getEmployees from 'src/services/getEmployees';
 import { useSnackbar } from 'src/context/SnackbarContext';
@@ -114,19 +116,7 @@ const useEmployees = ({ id, empid = '' }) => {
 
   const downloadCSVFormate = () => {
     // Add your download logic here
-    const data = [
-      [
-        'EmployeeABNNo',
-        'EmployeeAddressLine1',
-        'EmployeeAddressLine2',
-        'EmployeeEmail',
-        'EmployeeFullName',
-        'EmployeeTFNNo',
-        'Suburb',
-        'State',
-        'PostalCode',
-      ],
-    ];
+    const data = [csvKeys];
 
     // Convert array of data into CSV string
     const csvContent = data.map((e) => e.join(',')).join('\n');

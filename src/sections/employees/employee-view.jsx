@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import { Box, Card, Stack, Paper, Button, Container, Typography } from '@mui/material';
 
+import useCSVParser from 'src/hooks/use-csv-parser';
 import useEmployees from 'src/hooks/useEmployees/useEmployees';
 
 import { employeeColumns } from 'src/utils/getDataGridColumns';
@@ -34,6 +35,7 @@ export default function EmployeesView() {
   } = useEmployees({ id });
 
   const methods = useForm();
+  const { formattedFile } = useCSVParser();
 
   const [open, setOpen] = useState(false);
 
@@ -63,9 +65,9 @@ export default function EmployeesView() {
     downloadCSVFormate();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    uploadCSVFile({ clientId: id, file }).then((res) => {
+  const handleFileChange = async (event) => {
+    const file = await formattedFile({ file: event.target.files[0] });
+    await uploadCSVFile({ clientId: id, file }).then((res) => {
       if (res.warnings.length === 0) {
         console.log(res, 'res if');
         setOpen(!open);
