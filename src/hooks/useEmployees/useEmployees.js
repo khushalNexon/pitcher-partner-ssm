@@ -74,6 +74,9 @@ const useEmployees = ({ id, empid = '' }) => {
           EmployeeAddressLine1: payload.EmployeeAddressLine1,
           EmployeeAddressLine2: payload?.EmployeeAddressLine2 ?? '',
           EmployeeTFNNo: payload.EmployeeTFNNo,
+          Suburb: payload.Suburb,
+          PostalCode: payload.PostalCode,
+          State: payload.State,
         },
       ];
       setEmployees(updatedEmployees);
@@ -119,6 +122,9 @@ const useEmployees = ({ id, empid = '' }) => {
         'EmployeeEmail',
         'EmployeeFullName',
         'EmployeeTFNNo',
+        'Suburb',
+        'State',
+        'PostalCode',
       ],
     ];
 
