@@ -65,7 +65,7 @@ const useGenerateReport = () => {
       size: 10,
       color: rgb(0, 0, 0),
     });
-    firstPage.drawText(`${State ?? ''}, ${PostalCode ?? ''}`, {
+    firstPage.drawText(`${State ? `${State}, ` : ''}${PostalCode || ''}`, {
       x: 50,
       y: 601,
       size: 10,
