@@ -2,7 +2,9 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
+
+import GridToolbar from './GridToolbar';
 
 export default function DataGridTable({
   checkboxSelection,
